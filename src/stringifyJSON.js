@@ -3,6 +3,7 @@
 
 // but you don't so you're going to write it from scratch:
 var stringifyJSON = function(obj) {
+  
   if(typeof obj === 'number'){
 return '' + obj;
   }
@@ -16,8 +17,29 @@ return '' + obj;
     // return `"` + obj + `"`;
     return `"${obj}"`
   }
-  if(Array.isArray(obj)){    //&& !obj.length
-    return '[' +  "obj "+ ']';
+
+if(Array.isArray(obj)) { 
+    let arrayValues = [];   
+    _.each(obj, function(e){
+if(typeof e === 'number'){
+  arrayValues.push(e);
+} else {
+  arrayValues.push(stringifyJSON(e));
+}
+  })
+  return `[${arrayValues}]`;
   }
- 
+
+if(_.isObject(obj)){
+  let objectValues = [];
+  _.each(obj, function(value, key){
+  if(value === undefined || typeof value === 'function'){
+    return '{}';
+  } else {
+ objectValues.push(`${stringifyJSON(key)}:${stringifyJSON(value)}`);
+  }
+  })
+  return `{${objectValues}}`;
+}
+
 };
